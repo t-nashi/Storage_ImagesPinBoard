@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Images Pin Board</title>
+<!-- meta -->
+<meta name="keywords" content="images,upload,pin,memo">
+<meta name="description" content="気軽に画像アップロードとメモ、タグ分類が出来るツール">
+<meta name="robots" content="noindex,nofollow">
+<meta name="author" content="Tsutomu Takanashi">
+<meta name="copyright" content="Copyright Tsutomu Takanashi 2018. All Rights Reserved.">
+<!-- link file -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+<link href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css" rel="stylesheet" type="text/css">
+<script src="js/main.js"></script>
+<link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="wrapper">
+	<!-- ログボード -->
+	<div id="logBoard">
+		<ul id="list">
+			<li>[ ◆◇◆◇◆ アップロードファイルログ ◆◇◆◇◆ ]</li>
+		</ul>
+	</div>
+
+	<!-- ファイルドロップエリア -->
+	<form action="fileupload.php" method="post" enctype="multipart/form-data" name="frm" id="frm">
+	<div id="dropZone">
+		<p>Drop images here</p>
+		<div class="selectFile">Select images here<input type="file" id="files" name="upfile[]" multiple></div>
+	</div>
+	</form>
+
+	<!-- タグフィルター -->
+	<div class="tagFilter">
+		<ul id="filter" class="flexbox"></ul>
+	</div>
+
+	<!-- コンテンツ -->
+	<div id="content">
+		[ /imagesファイル一覧 ]
+	</div>
+
+	<!-- ボタン -->
+	<div id="btnOption" class="btn btn-option-vis"><span><b>option</b></span></div>
+	<div id="btnReload" class="btn btn-reload"><span><b>reload</b></span></div>
+	<div id="btnShowLogBoard" class="btn btn-show-logboard"><span><b>show Log</b></span></div>
+
+	<!-- フッター -->
+	<footer>
+		<h1 class="site-title">Images Pin Board</h1>
+	</footer>
+</div><!-- /#wrapper -->
+
+<!-- // テンプレート用の記述 start -->
+<!--
+[memo-start]
+	<%= num %>
+	<%= fullFileName %>
+	<%= sepFileName %>
+	<%= minImgPath %>
+	<%= listTagName %>
+[memo-end]
+-->
+<script type="text/template" id="template">
+	<li class="item <%= listTagName %> <%= minImgPath %>">
+		<div class="inner">
+			<a href="images/<%= fullFileName %>"><img src="images/<%= minImgPath %><%= fullFileName %>"></a>
+			<div class="img-overlay-content">
+				<input onfocus="setVal(this)" onkeyup="checkValChange(this, 'input')" type="text" class="text-filename" name="filename<%= num %>" id="filename<%= num %>" value="<%= fullFileName %>">
+				<button onclick="renameFiles('#filename<%= num %>', '<%= fullFileName %>', '<%= sepFileName %>.txt', '<%= minImgPath %>'); showBtnReload(); disabled=true;" name="btn-save-filename" class="btn-save-filename" disabled="">save</button>
+				<button onclick="deleteFiles('#filename<%= num %>', '<%= fullFileName %>', '<%= sepFileName %>.txt'); showBtnReload();" name="btn-delete" class="btn-delete">×</button>
+				<button onclick="writeTextData('#text<%= num %>', 'text/<%= sepFileName %>.txt'); showBtnReload(); disabled=true;" name="btn-save-memo" class="btn-save-memo" disabled="">save</button>
+			</div>
+		</div>
+		<textarea onfocus="setVal(this)" onkeyup="checkValChange(this, 'textarea')" class="text-memo" name="text<%= num %>" id="text<%= num %>"></textarea>
+	</li>
+</script>
+<!-- // テンプレート用の記述 end -->
+</body>
+</html>
